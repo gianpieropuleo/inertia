@@ -1557,6 +1557,34 @@ app.get('/deferred-props/page-1', (req, res) => {
   )
 })
 
+app.get('/scroll-region-deferred-back', (req, res) =>
+  inertia.render(req, res, { component: 'ScrollRegionDeferredBack/Index' }),
+)
+
+app.get('/scroll-region-deferred-back/create', (req, res) => {
+  if (!req.headers['x-inertia-partial-data']) {
+    return inertia.render(req, res, {
+      component: 'ScrollRegionDeferredBack/Create',
+      deferredProps: {
+        default: ['templates', 'authors'],
+      },
+      props: {},
+    })
+  }
+
+  setTimeout(
+    () =>
+      inertia.render(req, res, {
+        component: 'ScrollRegionDeferredBack/Create',
+        props: {
+          templates: ['How-to', 'Comparison'],
+          authors: ['Ada', 'Grace'],
+        },
+      }),
+    1000,
+  )
+})
+
 app.get('/deferred-props/with-partial-reload/:mode', (req, res) => {
   if (!req.headers['x-inertia-partial-data']) {
     return inertia.render(req, res, {
